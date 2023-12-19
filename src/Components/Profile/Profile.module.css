@@ -1,0 +1,38 @@
+.headingWrapper {
+    margin: 0 0 2rem 0;
+}
+
+.avatarImgWrapper {
+    position: relative;
+    width: 132px;
+    height: 132px;
+}
+
+.Img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-position: start;
+    border: 1px solid;
+}
+
+.pencilIconWrapper {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid;
+    border-radius: 50%;
+    padding: 4px;
+    /* background-color: gray; */
+}
+
+.Img2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}

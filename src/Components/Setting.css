@@ -1,0 +1,53 @@
+.settingDiv {
+    /* border: 1px solid; */
+    width: 81vw;
+    padding: 20px;
+}
+
+.Input {
+    margin: 10px 0 !important;
+    width: 30%;
+}
+
+.textFields {
+    padding-left: 2rem;
+    /* display: inline-block; */
+}
+
+.ProfileImg {
+    width: 30%;
+    border-radius: 50%;
+    float: right;
+    margin: -4rem 5rem;
+    border: 2px solid;
+    height: 50vh;
+}
+
+.UploadImg {
+    display: none;
+}
+
+.UploadImgLabel {
+    border: 1px solid;
+    font-size: 2rem;
+    color: black;
+    border-radius: 50%;
+    padding: 10px 13px;
+    position: absolute;
+    right: 23rem;
+    top: 18rem;
+}
+
+.profileDiv {
+    /* border: 1px solid; */
+    margin: 3rem auto;
+    /* height: auto; */
+}
+
+.saveBtn {
+    margin: 8rem auto;
+}
+.saveBtn button{
+    margin: 0px auto;
+    display: block;
+}
