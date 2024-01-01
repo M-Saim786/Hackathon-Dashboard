@@ -23,7 +23,7 @@ function About_Saylani() {
     };
     React.useEffect(() => {
         getData();
-    }, []);
+    }, [edit]);
 
     // const [title, setTitle] = useState("")
     // const [desc, setDesc] = useState("")

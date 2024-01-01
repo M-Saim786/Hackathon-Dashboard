@@ -23,7 +23,7 @@ function Privacy_Policy() {
     };
     React.useEffect(() => {
         getData();
-    }, []);
+    }, [edit]);
 
     // const [title, setTitle] = useState("")
     // const [desc, setDesc] = useState("")

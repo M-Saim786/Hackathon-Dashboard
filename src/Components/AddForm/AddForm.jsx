@@ -13,6 +13,7 @@ import {
 } from "firebase/storage";
 import Swal from 'sweetalert2';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { ToastContainer, toast } from 'react-toastify';
 const Typo1 = styled("div")(({ theme }) => ({
     // padding: theme.spacing(0, 2),
     fontFamily: "outfit",
@@ -27,46 +28,88 @@ const Typo1 = styled("div")(({ theme }) => ({
 function AddForm({ btnTitle, setEdit, publish,
     // title, desc, setDesc, setTitle,
     heading, showImgOpt }) {
+    // const toastId = React.useRef(null);
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [handleImg, setHandleImg] = useState([])
     const [Percent, setPercent] = useState(0)
     const [ImgUrl, setImgUrl] = useState("")
     const [ImgType, setImgType] = useState(null)
+    // const [, set] = useState(second)
     // console.log(handleImg)
     const HandleImage = async () => {
         console.log(handleImg)
         console.log(handleImg?.type)
-        if (handleImg && handleImg?.size < 1024 * 1024) {
-            setImgType(handleImg?.type)
-            const storageRef = ref(storage, `/PostImage/${handleImg.name}`)
-            const uploadTask = uploadBytesResumable(storageRef, handleImg);
+        if (handleImg?.type === "image/png") {
+            if (handleImg && handleImg?.size < 1024 * 1024) {
+                toast.info("Uploading Image..", { autoClose: 8000, });
+                setImgType(handleImg?.type)
+                const storageRef = ref(storage, `/PostImage/${handleImg.name}`)
+                const uploadTask = uploadBytesResumable(storageRef, handleImg);
+                // toast.info("Uploading Video")
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
 
-            uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const percent = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
+                        // update progress
+                        setPercent(percent);
+                    },
+                    (err) => console.log(err),
+                    () => {
+                        // download url
+                        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                            setImgUrl(url)
+                            toast.info("Image Uploaded", {
+                                autoClose: 1000, hideProgressBar: true
+                            });
+                            console.log(url);
+                        });
+                    }
+                );
+            }
+            else if (handleImg?.size > 1024 * 1024) {
+                Swal.fire("Error", "Image too big ", "error")
+            } else {
+                Swal.fire("Error", "upload image first ", "error")
 
-                    // update progress
-                    setPercent(percent);
-                },
-                (err) => console.log(err),
-                () => {
-                    // download url
-                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        setImgUrl(url)
-                        console.log(url);
-                    });
-                }
-            );
-        }
-        else if (handleImg?.size > 1024 * 1024) {
-            Swal.fire("Error", "Image too big ", "error")
-        } else {
-            Swal.fire("Error", "upload image first ", "error")
+            }
+        } else if (handleImg?.type === "video/mp4") {
+            if (handleImg && handleImg?.size < 1024 * 1024 * 5) {
+                toast.info("Uploading Video..", { autoClose: 10000 });
+                setImgType(handleImg?.type)
+                const storageRef = ref(storage, `/PostImage/${handleImg.name}`)
+                const uploadTask = uploadBytesResumable(storageRef, handleImg);
 
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const percent = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+
+                        // update progress
+                        setPercent(percent);
+                    },
+                    (err) => console.log(err),
+                    () => {
+                        // download url
+                        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                            setImgUrl(url)
+                            toast.info("Video Uploaded", { autoClose: 1000, hideProgressBar: true });
+                            console.log(url);
+                        });
+                    }
+                );
+            }
+            else if (handleImg?.size > 1024 * 1024) {
+                Swal.fire("Error", "Video Size is too big ", "error")
+            } else {
+                Swal.fire("Error", "upload Video first ", "error")
+
+            }
         }
     }
     useEffect(() => {
@@ -76,11 +119,15 @@ function AddForm({ btnTitle, setEdit, publish,
 
     }, [handleImg])
     const handleDesc = (e) => {
-
-        if (showImgOpt && desc.length < 100) {
+        const trimDesc = desc.trim()
+        const Desc = trimDesc.split(/\s+/).length
+        // setDesc(e.target.value)
+        console.log("Desc words", Desc)
+        if (showImgOpt && Desc < 100) {
             setDesc(e.target.value)
+
         }
-        else if (!showImgOpt && desc.length < 500) {
+        else if (!showImgOpt && Desc < 500) {
             setDesc(e.target.value)
         } else {
             Swal.fire("Error", "Desc is too big", "error")
@@ -129,6 +176,9 @@ function AddForm({ btnTitle, setEdit, publish,
                                         <Typo1 sx={{ maxWidth: "230px", pb: "18px" }}>
                                             *uploaded photos in maximum size of 1 mb
                                         </Typo1>
+                                        <Typo1>
+                                            *uploaded videos in maximum size of 5 mb
+                                        </Typo1>
                                     </Box>
                                     <Box>
                                         <Button
@@ -140,7 +190,7 @@ function AddForm({ btnTitle, setEdit, publish,
                                             add photo
                                             <input
                                                 hidden
-                                                accept="image/*"
+                                                // accept="image/*"
                                                 name="image"
                                                 multiple
                                                 type="file"
@@ -206,7 +256,7 @@ function AddForm({ btnTitle, setEdit, publish,
                                         {heading && heading} Desc
                                     </InputLabel>
                                     <Typography sx={{ fontWeight: "bold" }}>
-                                        {showImgOpt ? desc.length + "/100" : desc.length + "/500"}
+                                        {showImgOpt ? desc.trim().split(/\s+/).length + "/100" : desc.trim().split(/\s+/).length + "/500"}
                                     </Typography>
                                 </Box>
 
@@ -241,13 +291,14 @@ function AddForm({ btnTitle, setEdit, publish,
                                     width: "30%",
                                 }}
                                     onClick={() => publish(title, desc, ImgUrl, ImgType)}
+                                    disabled={Percent == 0 || Percent == 100 ? false : true}
                                 >
                                     {btnTitle && btnTitle}
                                 </Button>
                             </Box>
                         </Grid>
                     </Grid>
-
+                    <ToastContainer />
                 </Box>
             </Box>
 

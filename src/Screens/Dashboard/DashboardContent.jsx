@@ -14,6 +14,13 @@ import Divider from '@mui/material/Divider';
 import MyChart from '../../Components/Chart/MyChart'
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Cards from '../../Components/Card/Cards'
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import SwipeLeftIcon from '@mui/icons-material/SwipeLeft';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+
+
+
+
 const cardS = [
     {
         title: "Total Request",
@@ -120,7 +127,7 @@ function DashboardContent() {
                                 justifyContent={"start"}
                             >
                                 <Typography sx={{ color: "#007bff" }}>
-                                    icon
+                                    <HowToVoteIcon />
                                 </Typography>
                                 {/* <img src= alt="" /> */}
                                 <Typography sx={{ paddingLeft: "15px", fontSize: "20px", fontWeight: "bold" }}>
@@ -172,7 +179,7 @@ function DashboardContent() {
                                 justifyContent={"start"}
                             >
                                 <Typography sx={{ color: "#007bff" }}>
-                                    icon
+                                    <HowToRegIcon />
                                 </Typography>
                                 {/* <img src= alt="" /> */}
                                 <Typography sx={{ paddingLeft: "15px", fontSize: "20px", fontWeight: "bold" }}>
@@ -223,7 +230,7 @@ function DashboardContent() {
                                 justifyContent={"start"}
                             >
                                 <Typography sx={{ color: "#007bff" }}>
-                                    icon
+                                    <SwipeLeftIcon />
                                 </Typography>
                                 {/* <img src= alt="" /> */}
                                 <Typography sx={{ paddingLeft: "15px", fontSize: "20px", fontWeight: "bold" }}>

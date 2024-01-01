@@ -71,7 +71,7 @@ const AddDishesMenu = () => {
       await addDoc(collection(db, "Posts"), {
         title: title,
         desc: desc,
-        postImg: ImgUrl,
+        postUrl: ImgUrl,
         status: "active",
         date: date.toLocaleDateString(),
         imgType: ImgType

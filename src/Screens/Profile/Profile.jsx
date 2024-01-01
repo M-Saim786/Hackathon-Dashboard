@@ -13,14 +13,14 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import styles from "./Profile.module.css";
 import PreviewImage from './PreviewImage'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import Swal from 'sweetalert2'
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
     width: 22,
     height: 22,
     border: `2px solid ${theme.palette.background.paper}`,
 }));
-
-
 
 
 function Profile() {
@@ -32,25 +32,31 @@ function Profile() {
     const [Ref_ID, setRef_ID] = useState('')
     const [OldImg, setOldImg] = useState('')
     const [NewAvatar, setNewAvatar] = useState("")
-    let Recent_ID = localStorage.getItem('User_ID')
 
-    // useEffect(() => {
-    //     const dbref = ref(db, 'Users')
-    //     onValue((dbref), (snapShot) => {
-    //         let data = snapShot.val()
-    //         data = Object.values(data)
-    //         for (const i of data) {
-    //             if (i.User_ID === Recent_ID) {
-    //                 setName(i.Name)
-    //                 setEmail(i.Email)
-    //                 setPassword(i.Password)
-    //                 setRef_ID(i.Ref_Key)
-    //                 setOldImg(i.Profile_Img)
-    //             }
-    //         }
-    //         // console.log(data)
-    //     })
-    // }, [])
+    const [User, setUser] = useState([])
+
+    let User_ID = localStorage.getItem('User_ID')
+
+    const getData = async () => {
+        const docRef = doc(db, "Users", User_ID);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            setUser(docSnap.data())
+            setName(docSnap.data()?.Name)
+            setEmail(docSnap.data()?.Email)
+            setPassword(docSnap.data()?.Password)
+            setOldImg(docSnap.data()?.ProfImg)
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
     const HandleName = (e) => {
         setName(e.target.value)
     }
@@ -75,16 +81,20 @@ function Profile() {
     }
     //  --------------------- Saving Profile Data to Firebase ---------------
     const SaveSetting = () => {
-        const dbref = ref(db, `Users/${Ref_ID}`)
-        update((dbref), {
+        const dbref = doc(db, "Users", User_ID)
+        updateDoc((dbref), {
             Email: Email,
-            Profile_Img: ImgUrl == '' ? OldImg : ImgUrl,
+            ProfImg: ImgUrl == '' ? OldImg : ImgUrl,
             Name: Name,
-            Password: Password
+            Password: Password,
+
+        }).then(() => {
+            Swal.fire("Success", "Porfile Updated..", "success")
+        }).catch((err) => {
+            Swal.fire("Success", err.message, "success")
+
         })
-        toast.success('Saved Successfully...!', {
-            hideProgressBar: true
-        })
+
     }
     return (
         <>

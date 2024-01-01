@@ -31,6 +31,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import InfoIcon from '@mui/icons-material/Info';
 import PolicyIcon from '@mui/icons-material/Policy';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../Config/Firebase';
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -109,27 +112,31 @@ function ResponsiveDrawer({ window, children }) {
         setMobileOpen(!mobileOpen);
     };
 
-    const loginCheck = () => {
+    const loginCheck = async () => {
         let User_ID = localStorage.getItem("User_ID")
         if (!User_ID) {
             Navigate('/')
         }
         else {
             Navigate("/dashboard")
-            // const dbref2 = ref(db, 'Users')
-            // onValue(dbref2, (snapShot) => {
-            //     let data1 = snapShot.val()
-            //     data1 = Object.values(data1)
-            //     console.log(data1)
-            //     for (const i of data1) {
-            //         if (i.User_ID === User_ID) {
-            //             setUser(i)
-            //             setProfImg(i.Profile_Img)
-            //         }
-            //     }
-            // })
+
+            const docRef = doc(db, "Users", User_ID);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                setUser(docSnap.data())
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!");
+            }
         }
     }
+
+    useEffect(() => {
+        loginCheck()
+    }, [])
+
     const logOut = () => {
         localStorage.removeItem("User_ID")
         loginCheck()
@@ -192,7 +199,7 @@ function ResponsiveDrawer({ window, children }) {
                                         >
                                             <ListItemButton disableRipple={true}>
                                                 <ListItemIcon sx={{
-                                                    minWidth: "24px", mr: "10px", 
+                                                    minWidth: "24px", mr: "10px",
                                                     // color: "white"
                                                 }}>
                                                     {item?.icon}
@@ -212,9 +219,11 @@ function ResponsiveDrawer({ window, children }) {
                         </List>
                     </Box>
                 ))}
+
+
             {/* </List> */}
             {/* <Divider /> */}
-            {/* <List sx={{ position: "absolute", bottom: 0 }}>
+            <List >
                 <ListItem >
                     <Box
                         sx={{
@@ -236,7 +245,7 @@ function ResponsiveDrawer({ window, children }) {
                             }}
                         >
                             <img
-                                src={User?.Profile_Img}
+                                src={User?.ProfImg}
                                 width="80%"
                                 style={{
                                     borderRadius: "50%",
@@ -285,7 +294,7 @@ function ResponsiveDrawer({ window, children }) {
                     </Button>
 
                 </ListItem>
-            </List> */}
+            </List>
         </div>
     );
 
