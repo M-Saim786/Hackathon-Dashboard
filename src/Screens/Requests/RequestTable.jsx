@@ -7,9 +7,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box, Typography } from "@mui/material";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
+import SwipeRightIcon from '@mui/icons-material/SwipeRight'; import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 const ParentBox = styled(Box)`
   height: 100px;
   width: 100%;
@@ -40,17 +39,6 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 });
 
 
-// const rows = [
-//     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-// ];
 
 const StyledGrid = styled(DataGrid)(({ theme }) => ({
   "& .css-17jjc08-MuiDataGrid-footerContainer": {
@@ -77,19 +65,19 @@ const StyledGrid = styled(DataGrid)(({ theme }) => ({
 }))
 
 
-export default function ProductTable({ rows, EditPro, SellPro }) {
+export default function RequestTable({ rows, acceptReq, rejectReq }) {
 
 
   const columns = [
     { field: 'id', headerName: '#', width: 70 },
-    { field: 'pName', headerName: 'Product Name', width: 150 },
+    { field: 'title', headerName: 'Req Title', width: 150 },
     {
-      field: 'imgUrl', headerName: 'Product Image', width: 150, type: "image",
+      field: 'requestImg', headerName: 'Req Image', width: 150, type: "image",
       renderCell: (params) => {
         return (
           <Avatar
             alt="Product Image"
-            src={params.value}
+            src={params?.value}
             sx={{
               width: "60%", height: "7.5vh",
               borderRadius: "0px"
@@ -100,18 +88,54 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
         );
       },
     },
-    { field: 'pQty', headerName: 'Product Quantity', width: 150 },
-    { field: 'pPrice', headerName: 'Product Price', width: 170 },
+    { field: 'Desc', headerName: 'Applicant Gender', width: 150 },
+    {
+      field: 'createdAt', headerName: 'Date', width: 170,
+      renderCell: (params) => {
+        const { value } = params
+        console.log("params", params.value)
+        return (
+          <Typography>
+            {/* {value} */}
+            {/* {params?.createdAt?.toUTCString()} */}
+          </Typography>
+        );
+      }
+    },
 
-    { field: 'cName', headerName: 'Company Name', width: 170 },
-    { field: 'date', headerName: 'Date', width: 170 },
+    { field: 'Phone', headerName: 'Applicant Phone', width: 170 },
+    { field: 'type', headerName: 'Req Types', width: 170 },
+    {
+      field: 'status', headerName: 'Req Status', width: 170,
+      renderCell: (params) => {
+        const { value } = params
+        console.log("status :", value)
+        return (
+          <Typography sx={{
+            color: `${value !== "request" ? value === "approve" ? "#30A15F" : "red" : "#0A81C5"
+              }`,
+            border: `1px solid ${value !== "request" ? value === "approve" ? "#30A15F" : "red" : "#0A81C5"
+              }`,
+            width: "80px",
+            textAlign: "center",
+            borderRadius: "5px",
+            fontWeight: "bold",
+            padding: "1px"
+          }}>
+            {value}
+          </Typography>
+
+        )
+      }
+    },
+    // { field: 'date', headerName: 'Date', width: 170 },
     {
       field: 'action',
       headerName: 'Action',
       // description: 'This column has a value getter and is not sortable.',
       sortable: false,
       width: 100,
-      type: "image",
+      // type: "image",
       renderCell: (params) => {
         return (
           <LightTooltip
@@ -131,9 +155,9 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
                         borderRight: "4px solid blue",
                       },
                     }}
-                    onClick={() => EditPro(params.row.prodKey)}
+                    onClick={() => acceptReq(params.row.postId)}
                   >
-                    <DriveFileRenameOutlineIcon sx={{ fontSize: "18px" }} />
+                    <SwipeRightIcon sx={{ fontSize: "18px" }} />
                     <Typography
                       sx={{
                         padding: "0 5px",
@@ -141,7 +165,7 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
                         cursor: "pointer",
                       }}
                     >
-                      Edit
+                      Approve
                     </Typography>
                   </Box>
                   <Box
@@ -151,14 +175,14 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
                       alignItems: "center",
                       cursor: "pointer",
                       "&:hover": {
-                        borderLeft: "4px solid green",
-                        borderRight: "4px solid green",
+                        borderLeft: "4px solid rgb(231, 92, 98)",
+                        borderRight: "4px solid rgb(231, 92, 98)",
                       },
                     }}
-                    onClick={() => SellPro(params.row.prodKey)}
+                    onClick={() => rejectReq(params.row.postId)}
                   >
                     {/* <Typography > */}
-                    <AttachMoneyIcon sx={{ fontSize: "18px" }} />
+                    <ThumbDownAltIcon sx={{ fontSize: "18px" }} />
                     {/* </Typography> */}
                     <Typography
                       sx={{
@@ -167,7 +191,7 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
                         cursor: "pointer",
                       }}
                     >
-                      Sale
+                      Reject
                     </Typography>
                   </Box>
                 </Box>
@@ -200,7 +224,7 @@ export default function ProductTable({ rows, EditPro, SellPro }) {
     },
   ];
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ height: "70vh", width: '100%' }}>
       <StyledGrid
         rows={rows}
         columns={columns}

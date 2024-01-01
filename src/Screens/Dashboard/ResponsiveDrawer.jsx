@@ -17,18 +17,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 // import DashboardContent from './DashboardContent';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 // import { listItems } from './Drawer';
-import { Button } from '@mui/material';
+import { Button, ListItemIcon } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { styled } from '@mui/material/styles';
-import Logo from '../Assests/logo.png'
+import Logo from '../../Assests/logo.png'
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
-
+import InfoIcon from '@mui/icons-material/Info';
+import PolicyIcon from '@mui/icons-material/Policy';
 
 const drawerWidth = 240;
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -44,36 +46,62 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 function ResponsiveDrawer({ window, children }) {
     const listItems = [
         {
-            goto: "/dashboard",
-            name: "Dashboard",
-            icon: <DashboardIcon />
+            category: "Main",
+            ListItems: [{
+                goto: "/dashboard",
+                name: "Dashboard",
+                icon: <DashboardIcon />
+            }]
         },
         {
-            goto: "/dashboard/prod",
-            name: "Products",
-            icon: <CategoryIcon />
+            category: "Requests",
+            ListItems: [{
+                goto: "/request",
+                name: "Requests",
+                icon: <CategoryIcon />
+            }]
+        },
+
+        {
+            category: "Posts",
+            ListItems: [{
+                goto: "/posts",
+                name: "Posts",
+                icon: <PostAddIcon />
+            }]
         },
         {
-            goto: "/dashboard/addPro",
-            name: "Add Products",
-            icon: <ProductionQuantityLimitsIcon />
-        },
-        {
-            goto: "/dashboard/sales",
-            name: "Sales",
-            icon: <ReceiptIcon />
-        },
-        {
-            goto: "/dashboard/settings",
-            name: "Settings",
-            icon: <SettingsSuggestIcon />
+            category: "General",
+            ListItems: [
+                {
+                    goto: "/privacyPolicy",
+                    name: "Privacy Policy",
+                    icon: <PolicyIcon />
+                },
+                {
+                    goto: "/termsCondtions",
+                    name: "Terms & Conditions",
+                    icon: <SettingsSuggestIcon />
+                },
+                {
+                    goto: "/aboutSaylani",
+                    name: "About Saylani",
+                    icon: <InfoIcon />
+                },
+                {
+                    goto: "/settings",
+                    name: "Settings",
+                    icon: <SettingsSuggestIcon />
+                },
+            ]
         },
 
     ]
     const location = useLocation()
     let Navigate = useNavigate()
     const [User, setUser] = React.useState([])
-    const activeItem = listItems.filter((navItem) => navItem.goto === location.pathname)
+    const activeItem = listItems?.ListItems?.filter((navItem) => navItem.goto === location.pathname)
+    console.log(location.pathname)
     // const { window ;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -84,7 +112,7 @@ function ResponsiveDrawer({ window, children }) {
     const loginCheck = () => {
         let User_ID = localStorage.getItem("User_ID")
         if (!User_ID) {
-            Navigate('/gotologin')
+            Navigate('/')
         }
         else {
             Navigate("/dashboard")
@@ -102,11 +130,6 @@ function ResponsiveDrawer({ window, children }) {
             // })
         }
     }
-    React.useEffect(() => {
-        // console.log(props)
-        loginCheck()
-
-    }, [])
     const logOut = () => {
         localStorage.removeItem("User_ID")
         loginCheck()
@@ -123,37 +146,75 @@ function ResponsiveDrawer({ window, children }) {
             {/* <Toolbar /> */}
             <Divider />
             {/* <List> */}
-            <List>
-                {listItems.map((text, index) => (
-                    // console.log(text.goto),
-                    <ListItem key={index} disablePadding sx={{
-                        backgroundColor: activeItem[0]?.goto === text.goto ? "#006EB5" : "",
-                        width: "100%",
-                    }} onClick={() => Navigate(text.goto)} >
-                        <ListItemButton sx={{
-                            // border: "1px solid red",
-                            color: "gray",
-                            display: "flex",
-                            my: 0.5
-                        }}>
-                            <ListItemText sx={{
-                                color: activeItem[0]?.goto === text.goto ? "white" : "gray",
-                            }}>
-                                {text.icon}
-                            </ListItemText>
-                            <ListItemText primary={text.name} sx={{
-                                fontWeight: "bolder",
-                                color: activeItem[0]?.goto === text.goto ? "white" : "gray",
-                                // border: "1px solid red"
-                            }}>
-                            </ListItemText>
-                        </ListItemButton>
-                    </ListItem>
+            {listItems &&
+                listItems.map((item, index) => (
+                    <Box sx={{ color: "#9EA3AE", }} key={index}>
+                        <Box sx={{ mt: "20px", pl: "16px", }}>
+                            <Typography sx={{ fontSize: "14px", fontWeight: 400 }}>
+                                {item?.category}
+                            </Typography>
+                        </Box>
+                        <List sx={{}}>
+                            {item?.ListItems &&
+                                item?.ListItems?.map((item, index) => (
+                                    <Box
+                                        component={NavLink}
+                                        to={item.goto}
+                                        // onClick={() => Navigate(item.goto)}
+                                        key={index}
+                                        sx={{
+                                            color: "black",
+                                            textDecoration: "none",
+                                            // my: "2px",
+                                            // "&.active": { color: "#0072BB" },
+                                            "&.active > li": { backgroundColor: "#0072BB", color: "white" },
+                                            "&.active > li >svg": { color: "white" },
+                                            "&.active > li > div >div > svg": {
+                                                color: "white"
+                                            },
+                                            "&.active ": { backgroundColor: "#0072BB", },
+                                            textDecoration: "none", "&:hover": {
+                                                textDecoration: "none"
+                                            },
+                                            backgroundColor: "red"
+                                            // border: "1px solid red"
+                                        }}
+                                    >
+                                        <ListItem
+                                            key={item.name}
+                                            disablePadding
+                                            sx={{
+                                                color: "inherit",
+                                                fontWeight: "bold",
+
+                                                // color: "white"
+                                            }}
+                                        >
+                                            <ListItemButton disableRipple={true}>
+                                                <ListItemIcon sx={{
+                                                    minWidth: "24px", mr: "10px", 
+                                                    // color: "white"
+                                                }}>
+                                                    {item?.icon}
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={item?.name}
+                                                    sx={{
+                                                        color: "inherit",
+                                                        fontSize: 20,
+                                                        fontWeight: "bold"
+                                                    }}
+                                                />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </Box>
+                                ))}
+                        </List>
+                    </Box>
                 ))}
-            </List>
             {/* </List> */}
-            <Divider />
-            <List sx={{ position: "absolute", bottom: 0 }}>
+            {/* <Divider /> */}
+            {/* <List sx={{ position: "absolute", bottom: 0 }}>
                 <ListItem >
                     <Box
                         sx={{
@@ -224,7 +285,7 @@ function ResponsiveDrawer({ window, children }) {
                     </Button>
 
                 </ListItem>
-            </List>
+            </List> */}
         </div>
     );
 
@@ -292,7 +353,11 @@ function ResponsiveDrawer({ window, children }) {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{
+                    flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    mt: 10,
+                    // mt: { lg: 10,  } 
+                }}
             >
                 {/* <Toolbar /> */}
                 {children}
