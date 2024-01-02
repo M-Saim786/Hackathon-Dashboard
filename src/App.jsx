@@ -6,11 +6,12 @@ import Profile from "./Screens/Profile/Profile";
 import DashboardContent from "./Screens/Dashboard/DashboardContent";
 // import Resquests from "./Components/Requests/Request";
 import Requests from "./Screens/Requests/Request";
-import AddPost from "./Screens/Requests/AddPost";
+// import AddPost from "./Screens/Requests/AddPost";
 import Posts from "./Screens/Posts/Posts";
 import Privacy_Policy from "./Screens/General/Privacy_Policy";
 import Terms_Condition from "./Screens/General/Terms_Condition";
 import About_Saylani from "./Screens/General/About_Saylani";
+import ChairManMessage from "./Screens/General/ChairManMessage";
 // import Resquests from "./Components/Products/Products";
 export default function App() {
   return (
@@ -23,11 +24,8 @@ export default function App() {
         <Route path="/privacyPolicy" element={<Dashboard Component={Privacy_Policy} />} />
         <Route path="/termsCondtions" element={<Dashboard Component={Terms_Condition} />} />
         <Route path="/aboutSaylani" element={<Dashboard Component={About_Saylani} />} />
-        {/* <Route path="/dashboard/sales" element={<Dashboard Component={Sales} />} />/ */}
+        <Route path="/chairManMessage" element={<Dashboard Component={ChairManMessage} />} />
         <Route path="/settings" element={<Dashboard Component={Profile} />} />
-        {/* <Route path="/dashboard/EditPro/:id" element={<Dashboard Component={EditProduct} />} />
-        <Route path="/dashboard/SellPro/:id" element={<Dashboard Component={SellProducts} />} /> */}
-        {/* </Route> */}
       </Routes>
     </>
   );

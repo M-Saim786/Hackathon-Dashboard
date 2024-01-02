@@ -1,12 +1,12 @@
-import { onValue, ref } from 'firebase/database'
+// import { onValue, ref } from 'firebase/database'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../Config/Firebase'
 // import './Product.css'
-import { Box, Typography, styled } from "@mui/material"
+import { Box,  } from "@mui/material"
 import { useNavigate } from 'react-router-dom'
-import ProductTable from './RequestTable'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllProduct } from '../../Redux/actions'
+// import ProductTable from './RequestTable'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { getAllProduct } from '../../Redux/actions'
 import RequestTable from './RequestTable'
 import { collection, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore'
 import Header from '../../Components/Header/Header'
@@ -15,11 +15,8 @@ import Header from '../../Components/Header/Header'
 
 
 function Requests() {
-  // const dispatch = useDispatch()
   const [rows, setRows] = useState([])
   const [docId, setdocId] = useState(null)
-  // const product = useSelector((state) => state.counter)
-  // console.log(product)
   let Navigate = useNavigate()
   const getData = async () => {
     let User_ID = localStorage.getItem("User_ID")
@@ -27,7 +24,6 @@ function Requests() {
       Navigate('/')
     }
     else {
-
       await getDocs(collection(db, "Requests"))
         .then((querySnapshot) => {
           const newData = querySnapshot.docs

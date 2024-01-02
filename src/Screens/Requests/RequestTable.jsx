@@ -6,9 +6,13 @@ import { Avatar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Typography } from "@mui/material";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import SwipeRightIcon from '@mui/icons-material/SwipeRight'; import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+// import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import SwipeRightIcon from '@mui/icons-material/SwipeRight';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import tableImg from "../../Assests/altImg.png"
+
+
 const ParentBox = styled(Box)`
   height: 100px;
   width: 100%;
@@ -70,17 +74,18 @@ export default function RequestTable({ rows, acceptReq, rejectReq }) {
 
   const columns = [
     { field: 'id', headerName: '#', width: 70 },
-    { field: 'title', headerName: 'Req Title', width: 150 },
+    { field: 'mainType', headerName: "Request Title", width: 150 },
     {
       field: 'requestImg', headerName: 'Req Image', width: 150, type: "image",
       renderCell: (params) => {
         return (
           <Avatar
             alt="Product Image"
-            src={params?.value}
+            src={params?.value !== null ? params?.value : tableImg}
             sx={{
               width: "60%", height: "7.5vh",
-              borderRadius: "0px"
+              borderRadius: "0px",
+              backgroundImage: "contain"
 
             }}
 
@@ -88,22 +93,26 @@ export default function RequestTable({ rows, acceptReq, rejectReq }) {
         );
       },
     },
-    { field: 'Desc', headerName: 'Applicant Gender', width: 150 },
+    { field: 'name', headerName: 'Applicant Name', width: 150 },
+    { field: 'gender', headerName: 'Applicant Gender', width: 150 },
+    { field: 'Cnic', headerName: 'Applicant CNIC', width: 150 },
+    { field: 'Phone', headerName: 'Applicant Phone', width: 170 },
     {
-      field: 'createdAt', headerName: 'Date', width: 170,
+      field: 'createdAt', headerName: 'Date', width: 100,
       renderCell: (params) => {
         const { value } = params
         console.log("params", params.value)
         return (
-          <Typography>
-            {/* {value} */}
-            {/* {params?.createdAt?.toUTCString()} */}
+          // <Box > 
+          <Typography sx={{ border: "1px solid #bbbbbb", borderRadius: "5px", padding: "2px 5px" }}>
+            {params?.value}
+            {/* {params?.value.slice(0, 8)} */}
           </Typography>
+          // </Box>
         );
       }
     },
 
-    { field: 'Phone', headerName: 'Applicant Phone', width: 170 },
     { field: 'type', headerName: 'Req Types', width: 170 },
     {
       field: 'status', headerName: 'Req Status', width: 170,

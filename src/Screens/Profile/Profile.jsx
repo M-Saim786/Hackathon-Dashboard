@@ -1,21 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react'
 // import '../Setting.css'
 import { Box, Button, Grid, TextField, Typography } from '@mui/material'
-import { onValue, ref, update } from 'firebase/database'
+// import { onValue, ref, update } from 'firebase/database'
 import { db, storage } from '../../Config/Firebase'
 import { getDownloadURL, ref as sRef, uploadBytes } from 'firebase/storage'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+// import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { styled } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
+// import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+// import Stack from '@mui/material/Stack';
 import styles from "./Profile.module.css";
 import PreviewImage from './PreviewImage'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import Swal from 'sweetalert2'
-
+import altImg from "../../Assests/download.png"
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
     width: 22,
     height: 22,
@@ -29,8 +29,8 @@ function Profile() {
     const [Email, setEmail] = useState('')
     const [Password, setPassword] = useState('')
     const [ImgUrl, setImgUrl] = useState('')
-    const [Ref_ID, setRef_ID] = useState('')
-    const [OldImg, setOldImg] = useState('')
+    // const [Ref_ID, setRef_ID] = useState('')
+    const [OldImg, setOldImg] = useState(null)
     const [NewAvatar, setNewAvatar] = useState("")
 
     const [User, setUser] = useState([])
@@ -61,13 +61,16 @@ function Profile() {
         setName(e.target.value)
     }
     const HandleImg = (e) => {
+        toast.info('Uploading Image', {
+            autoClose: 4000
+        })
         const storageRef = sRef(storage, `Images/${e.target.files[0].name}`)
         uploadBytes(storageRef, e.target.files[0])
             .then((snapShot) => {
-                toast.info('Uploading Image')
                 getDownloadURL(snapShot.ref)
                     .then((url) => {
                         if (url) {
+                            toast.success('Uploaded Image', { hideProgressBar: true, autoClose: 1000 })
                             setImgUrl(url)
                         }
                     })
@@ -121,10 +124,11 @@ function Profile() {
                                 file={NewAvatar}
                                 alt="avatar_img"
                                 className={styles.Img}
+                                sx={{ height: "30vh" }}
                             />
                         ) : (
                             <img
-                                src={OldImg}
+                                src={OldImg !== undefined ? OldImg : altImg}
                                 alt="avatar_img"
                                 className={styles.Img}
                             />
@@ -160,10 +164,19 @@ function Profile() {
                         </Grid>
                     </Box>
                 </Box>
-                <Box textAlign={"center"}>
 
-                    <Button variant='contained' onClick={SaveSetting} sx={{ textTransform: "capitalize", my: 2 }} >
-                        Save Settings
+                <Box sx={{ textAlign: "center" }}>
+                    <Button sx={{
+                        backgroundColor: "#006EB5", color: "white", textTransform: "capitalize", fontSize: 14, fontWeight: "bold", "&:hover": {
+                            backgroundColor: "#006EB5"
+                        },
+                        width: "15%",
+                    }}
+                        onClick={() => SaveSetting()}
+                    // disabled={Percent == 0 || Percent == 100 ? false : true}
+                    >
+                        Update Profile
+                        {/* {btnTitle && btnTitle} */}
                     </Button>
                 </Box>
             </Box>

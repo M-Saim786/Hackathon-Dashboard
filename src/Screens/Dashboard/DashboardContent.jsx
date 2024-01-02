@@ -17,6 +17,7 @@ import Cards from '../../Components/Card/Cards'
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import SwipeLeftIcon from '@mui/icons-material/SwipeLeft';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import ReactApexChart from 'react-apexcharts'
 
 
 
@@ -75,9 +76,7 @@ function DashboardContent() {
                 }).catch((err) => {
                     console.log("err", err)
                 })
-
         }
-
     }
 
     useEffect(() => {
@@ -88,6 +87,59 @@ function DashboardContent() {
         setremainingReq(remainReq.length)
 
     }, [requests])
+
+    const [EduReq, setEduReq] = useState(0)
+    const [moneyReq, setmoneyReq] = useState(0)
+    const [clothsReq, setclothsReq] = useState(0)
+    const [medicalReq, setmedicalReq] = useState(0)
+    const [maleReq, setmaleReq] = useState(0)
+    const [feMaleReqs, setfeMaleReqs] = useState(0)
+
+    const [byTypeReq, setbyTypeReq] = useState([])
+    const [genderArr, setbyGender] = useState([])
+
+
+
+    useEffect(() => {
+        const educationReq = requests.filter((req) => req?.mainType === "education")
+        const MoneyReq = requests.filter((req) => req?.mainType === "money")
+        const ClothsReq = requests.filter((req) => req?.mainType === "cloths")
+        const MedicalReq = requests.filter((req) => req?.mainType === "medical")
+
+        setEduReq(educationReq.length)
+        setmoneyReq(MoneyReq.length)
+        setclothsReq(ClothsReq.length)
+        setmedicalReq(MedicalReq.length)
+
+        const countsArray = [educationReq.length, MoneyReq.length, ClothsReq.length, MedicalReq.length];
+        setbyTypeReq(countsArray)
+        console.log(countsArray);
+
+
+
+        // setbyTypeReq([educationReq?.length, MoneyReq?.length, ClothsReq?.length, MedicalReq?.length])
+        // console.log("byTypeReq", byTypeReq)
+        const MaleReq = requests.filter((req) => req?.gender === "male")
+        const feMaleReq = requests.filter((req) => req?.gender === "feMale")
+        console.log("feMaleReq.length", feMaleReq.length)
+
+        const genderArr = [MaleReq.length, feMaleReq.length];
+        setbyGender(genderArr)
+
+        // console.log("MoneyReq.length", MoneyReq.length)
+        // console.log("ClothsReq.length", ClothsReq.length)
+
+
+        setmaleReq(MaleReq.length)
+        setfeMaleReqs(feMaleReq.length)
+    }, [requests])
+
+
+
+    console.log("responsede req", RespondedReq)
+
+
+
 
 
     return (
@@ -105,7 +157,7 @@ function DashboardContent() {
                     justifyContent: "center"
                     // flexDirection: "row"
                 }}>
-                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: 2, width: "100%" }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: { lg: 2, md: 2, sm: 0, xs: 0 }, my: 2, width: "100%" }}>
                         <Box
                             component={"div"}
                             sx={{
@@ -157,7 +209,7 @@ function DashboardContent() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: 2, width: "100%" }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: { lg: 2, md: 2, sm: 0, xs: 0 }, my: 2, width: "100%" }}>
                         <Box
                             component={"div"}
                             sx={{
@@ -208,7 +260,7 @@ function DashboardContent() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: 2, width: "100%" }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} sx={{ mx: { lg: 2, md: 2, sm: 0, xs: 0 }, my: 2, width: "100%" }}>
                         <Box
                             component={"div"}
                             sx={{
@@ -262,7 +314,33 @@ function DashboardContent() {
 
                 </Box>
                 <Divider sx={{ my: 2 }} />
-                <MyChart sales={requests} />
+                <Box padding={2}
+                    sx={{
+                        width: "100%",
+                        borderRadius: "5px",
+                        margin: "0px auto",
+                        display: "flex",
+                        justifyContent: "space-around",
+                        flexDirection: { lg: "row", md: "row", sm: "column", xs: "column" },
+                        height: "auto"
+                    }}
+                >
+                    <Box
+                        sx={{ width: { lg: "45%", md: "45%", sm: "100%", xs: "100%" }, border: "1px solid #E1e1e6", borderRadius: "5px", my: { lg: 0, md: 0, sm: 2, xs: 2 } }}>
+                        <MyChart
+                            title={"Request By Type"}
+                            series={byTypeReq}
+                            labels={['Education Request', 'Money Request', 'Cloths Request', 'Medical Request']} />
+                    </Box>
+                    <Box
+                        sx={{ width: { lg: "45%", md: "45%", sm: "100%", xs: "100%" }, border: "1px solid #E1e1e6", borderRadius: "5px" }}>
+
+                        <MyChart
+                            series={genderArr}
+                            title={"Request By Gender"}
+                            labels={['Male Requests', 'Female Request']} />
+                    </Box>
+                </Box >
             </Box>
         </>
 

@@ -64,7 +64,7 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 });
 
 
-function CustomTable({ Data }) {
+function CustomTable({ Data, setedit, deleteID, editID }) {
 
     const [SelectValue, setSelectValue] = useState("Name");
     // const { data: allDishes, isLoading } = useGetAllDishesQuery();
@@ -100,6 +100,24 @@ function CustomTable({ Data }) {
         setSelectValue(event.target.value);
         console.log(SelectValue);
     };
+    useEffect(() => {
+        console.log(SelectValue)
+        if (SelectValue === "Name") {
+            // const dataSet = allDishes?.data?.sort((a, b) => a.dishName.localeCompare(b.dishName));
+            // console.log(dataSet)
+        }
+        //  else if (SelectValue === "Number") {
+        // allDishes?.data?.sort((a, b) => a.id - b.id);
+        // }
+        else if (SelectValue === "A - Z") {
+            const sortedData = displayedData.sort((a, b) => (a?.title || '').localeCompare(b?.title || ''));
+            // console.log(sortedData);
+            setDisplayedData(sortedData)
+            console.log(Data)
+
+        }
+        // setData(a);
+    }, [SelectValue, displayedData]);
 
     return (
         <>
@@ -396,7 +414,7 @@ function CustomTable({ Data }) {
                                                         }}
                                                     >
                                                         <img
-                                                            src={v?.postImg ? v?.postImg : tableImg}
+                                                            src={v?.postUrl ? v?.postUrl : tableImg}
                                                             alt="card"
                                                             style={{ maxWidth: "40px", height: "40px" }}
                                                         />
@@ -485,7 +503,10 @@ function CustomTable({ Data }) {
                                                                                     borderRight: "4px solid blue",
                                                                                 },
                                                                             }}
-                                                                        // onClick={() => EditUser(row._id)}
+                                                                            onClick={() => {
+                                                                                setedit(true)
+                                                                                editID(v?.postID)
+                                                                            }}
                                                                         >
                                                                             <Typography
                                                                                 sx={{
@@ -508,7 +529,9 @@ function CustomTable({ Data }) {
                                                                                     borderRight: "4px solid red",
                                                                                 },
                                                                             }}
-                                                                        // onClick={() => handleDeleteUser(row._id)}
+                                                                            onClick={() => {
+                                                                                deleteID(v?.postID)
+                                                                            }}
                                                                         >
                                                                             <Typography
                                                                                 sx={{

@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-
-// import PostTable from "./PostMain";
-// import PostMain from "./PostMain";
-import AddPost from "./AddPost";
 import Header from "../../Components/Header/Header";
 import { db } from "../../Config/Firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import CustomTable from "../../Components/CustomTable/CustomTable";
 import AddForm from "../../Components/AddForm/AddForm";
 import Swal from "sweetalert2";
 
-
 const AddDishesMenu = () => {
   // this is Tabs
   const [tab, settab] = useState(0);
-  // const { data: allDishes, loading } = useGetAllDishesQuery()
-
-  // console.log("allDishes", allDishes)
 
   const handleTabChange = (event, newValue) => {
     settab(newValue);
@@ -50,17 +42,15 @@ const AddDishesMenu = () => {
 
   const getData = async () => {
     const querySnapshot = await getDocs(collection(db, "Posts"));
-    const newData = querySnapshot.docs.map((doc, i) => ({ ...doc.data(), id: ++i }));
+    const newData = querySnapshot.docs.map((doc, i) => ({ ...doc.data(), id: ++i, postID: doc.id }));
     setData(newData);
   };
-  useEffect(() => {
-    getData();
-  }, [edit]);
+
 
   const date = new Date()
   const [handleImg, setHandleImg] = useState([])
   const [ImgUrl, setImgUrl] = useState("")
-
+  const [getId, setgetId] = useState(null)
   const publishPost = async (title, desc, ImgUrl, ImgType) => {
     console.log("publishPost")
     console.log("ImgUrl", ImgUrl)
@@ -85,14 +75,33 @@ const AddDishesMenu = () => {
     }
   }
 
+  const editID = (id) => {
+    console.log("id", id)
+  }
+  const deleteID = async (id) => {
+    console.log("id", id)
+    if (id !== null || id !== undefined) {
+      setgetId(id)
+      await deleteDoc(doc(db, "Posts", id)).then((res) => {
+        Swal.fire("Success", "Posts Deleted Successfully...", "success")
+      }).catch((err) => {
+        console.log(err.message)
+        Swal.fire(err.message, "success")
 
+      })
 
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, [edit, getId]);
   return (
     <>
       {!edit && (
         <>
           <Header btnTitle={"Add Posts"} setedit={setEdit} heading={"All Posts"} />
-          <CustomTable Data={Data} />
+          <CustomTable Data={Data} setedit={setEdit} editID={editID} deleteID={deleteID} />
         </>
       )}
 

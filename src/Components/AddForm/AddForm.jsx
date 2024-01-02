@@ -153,7 +153,7 @@ function AddForm({ btnTitle, setEdit, publish,
                     </Box>
                 </Box>
 
-                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", }}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 5 }}>
                     <Grid item width="40%" >
                         {showImgOpt && <Grid>
                             <Box sx={{ ml: "29px", display: "flex", alignItems: "flex-end" }}>
@@ -240,7 +240,7 @@ function AddForm({ btnTitle, setEdit, publish,
                         </Grid>
                         <Grid>
                             <Box>
-                                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
 
                                     <InputLabel
                                         align="left"
@@ -266,12 +266,13 @@ function AddForm({ btnTitle, setEdit, publish,
                                     placeholder="Enter Desc"
                                     onChange={handleDesc}
                                     value={desc && desc}
+                                    // name="description"
+                                    // fullWidth
+                                    // placeholder="Description"
+                                    rows={7}
                                     multiline
-                                    maxRows={6}
                                     sx={{
                                         backgroundColor: "#F6F6F6",
-                                        // height: "5px",
-                                        outlineColor: "red !important",
                                         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                                             borderColor: "#80B3B0",
                                         },

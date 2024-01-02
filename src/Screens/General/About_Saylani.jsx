@@ -68,7 +68,7 @@ function About_Saylani() {
         <>{
             !edit && (
                 <Box>
-                    <Header btnTitle={"Add About"} heading={"About Saylani"} setedit={setEdit} />
+                    <Header btnTitle={DocId === null ? "Add About" : "Update About"} heading={"About Saylani"} setedit={setEdit} />
                     <ShowGeneral heading={Data.title} description={Data.desc} />
                 </Box>
             )
@@ -78,14 +78,8 @@ function About_Saylani() {
                     <AddForm
                         heading={"About Saylani"}
                         setEdit={setEdit}
-                        // input2Name={"Desc"}
-                        // input2PlaceHolder={"Enter Desc"} 
-                        btnTitle={"Add About"}
+                        btnTitle={DocId === null ? "Add About" : "Update About"}
                         publish={publishAbout}
-                        // setHandleImg={setHandleImg}
-                        // handleImg={handleImg}
-                        // ImgUrl={ImgUrl}
-                        // setImgUrl={setImgUrl}
                         showImgOpt={false}
                     />
                 )

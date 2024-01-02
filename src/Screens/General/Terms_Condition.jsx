@@ -27,8 +27,8 @@ function Terms_Condition() {
 
     // const [title, setTitle] = useState("")
     // const [desc, setDesc] = useState("")
-    const [handleImg, setHandleImg] = useState([])
-    const [ImgUrl, setImgUrl] = useState("")
+    // const [handleImg, setHandleImg] = useState([])
+    // const [ImgUrl, setImgUrl] = useState("")
 
     const publishTerms = async (title, desc) => {
         console.log(title, desc)
@@ -68,7 +68,7 @@ function Terms_Condition() {
         <>{
             !edit && (
                 <Box>
-                    <Header btnTitle={"Add Terms"} heading={"Terms and Condtions"} setedit={setEdit} />
+                    <Header btnTitle={DocId === null ? "Add Terms" : "Update Terms"} heading={"Terms and Condtions"} setedit={setEdit} />
                     <ShowGeneral heading={Data.title} description={Data.desc} />
                 </Box>
             )
@@ -78,14 +78,8 @@ function Terms_Condition() {
                     <AddForm
                         heading={"Terms and Conditon"}
                         setEdit={setEdit}
-                        // input2Name={"Desc"}
-                        // input2PlaceHolder={"Enter Desc"} 
-                        btnTitle={"Add Terms"}
+                        btnTitle={DocId === null ? "Add Terms" : "Update Terms"}
                         publish={publishTerms}
-                        // setHandleImg={setHandleImg}
-                        // handleImg={handleImg}
-                        // ImgUrl={ImgUrl}
-                        // setImgUrl={setImgUrl}
                         showImgOpt={false}
                     />
                 )

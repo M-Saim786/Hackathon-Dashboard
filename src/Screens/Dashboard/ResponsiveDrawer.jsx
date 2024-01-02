@@ -29,11 +29,13 @@ import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantity
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import MessageIcon from '@mui/icons-material/Message';
 import InfoIcon from '@mui/icons-material/Info';
 import PolicyIcon from '@mui/icons-material/Policy';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../Config/Firebase';
 import { useEffect } from 'react';
+import altImg from "../../Assests/download.png"
 
 const drawerWidth = 240;
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -92,6 +94,11 @@ function ResponsiveDrawer({ window, children }) {
                     icon: <InfoIcon />
                 },
                 {
+                    goto: "/chairManMessage",
+                    name: "Chairman Message",
+                    icon: <MessageIcon />
+                },
+                {
                     goto: "/settings",
                     name: "Settings",
                     icon: <SettingsSuggestIcon />
@@ -118,7 +125,7 @@ function ResponsiveDrawer({ window, children }) {
             Navigate('/')
         }
         else {
-            Navigate("/dashboard")
+            // Navigate("/dashboard")
 
             const docRef = doc(db, "Users", User_ID);
             const docSnap = await getDoc(docRef);
@@ -245,7 +252,7 @@ function ResponsiveDrawer({ window, children }) {
                             }}
                         >
                             <img
-                                src={User?.ProfImg}
+                                src={User?.ProfImg !== undefined ? User?.ProfImg : altImg}
                                 width="80%"
                                 style={{
                                     borderRadius: "50%",
