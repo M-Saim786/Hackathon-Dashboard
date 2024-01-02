@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import logoImg from "../../Assests/logo.png"
+import Swal from 'sweetalert2';
 
 function Login() {
 
@@ -40,16 +41,12 @@ function Login() {
             })
         } else {
             try {
-                const user = await signInWithEmailAndPassword(auth, Email, Password)
-                await toast.success('Login Success', {
-                    hideProgressBar: true,
-                    pauseOnHover: false,
+                await signInWithEmailAndPassword(auth, Email, Password).then((user) => {
+                    Swal.fire("Login Success", "", "success")
+                    // console.log(user.user.uid)
+                    localStorage.setItem('User_ID', user.user.uid)
+                    Navigate('/dashboard')
                 })
-
-
-                // console.log(user.user.uid)
-                localStorage.setItem('User_ID', user.user.uid)
-                Navigate('/dashboard')
             }
             catch (err) {
                 console.log(err)

@@ -39,8 +39,9 @@ function AddForm({ btnTitle, setEdit, publish,
     // console.log(handleImg)
     const HandleImage = async () => {
         console.log(handleImg)
-        console.log(handleImg?.type)
-        if (handleImg?.type === "image/png") {
+        console.log(handleImg?.type.includes("image/"))
+        if (handleImg?.type.includes("image/")) {
+            console.log(handleImg?.type)
             if (handleImg && handleImg?.size < 1024 * 1024) {
                 toast.info("Uploading Image..", { autoClose: 8000, });
                 setImgType(handleImg?.type)
