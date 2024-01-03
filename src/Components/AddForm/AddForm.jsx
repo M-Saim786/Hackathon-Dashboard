@@ -77,7 +77,7 @@ function AddForm({ btnTitle, setEdit, publish,
                 Swal.fire("Error", "upload image first ", "error")
 
             }
-        } else if (handleImg?.type === "video/mp4") {
+        } else if (handleImg?.type.includes("video")) {
             if (handleImg && handleImg?.size < 1024 * 1024 * 5) {
                 toast.info("Uploading Video..", { autoClose: 10000 });
                 setImgType(handleImg?.type)

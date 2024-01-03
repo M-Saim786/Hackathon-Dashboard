@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Header from '../../Components/Header/Header'
 // import CustomTable from '../CustomTable/CustomTable'
 import { db } from '../../Config/Firebase'
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import AddForm from '../../Components/AddForm/AddForm'
 import Swal from 'sweetalert2'
 import ShowGeneral from '../../Components/Show_General/ShowGeneral'
@@ -65,11 +65,29 @@ function Privacy_Policy() {
         }
     }
 
+    const deletePolicy = async () => {
+        console.log("deltre")
+        await deleteDoc(doc(db, "Privacy_Policy", DocId)).then((res) => {
+            setData(null)
+            Swal.fire("Success", "Deleted Successfully...", "success")
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err.message)
+            Swal.fire(err.message, "success")
+
+        })
+    }
+
     return (
         <>
             {!edit && (<Box>
                 <Header btnTitle={DocId === null ? "Add Policy" : "Update Policy"} heading={"Privacy Policy"} setedit={setEdit} />
-                <ShowGeneral heading={Data.title} description={Data.desc} />
+                <ShowGeneral
+                    heading={Data?.title}
+                    description={Data?.desc}
+                    deleteFunc={deletePolicy}
+                // Ensure deletePolicy is passed correctly
+                />
                 {/* <CustomTable Data={Data} /> */}
             </Box>)
             }
@@ -81,6 +99,8 @@ function Privacy_Policy() {
                         btnTitle={DocId === null ? "Add Policy" : "Update Policy"}
                         publish={publishPolicy}
                         showImgOpt={false}
+                    // Title={DocId !== null && Data?.title}
+                    // Desc={DocId !== null && Data?.desc}
                     />
                 </>
             )}

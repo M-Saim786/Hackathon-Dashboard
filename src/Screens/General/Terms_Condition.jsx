@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Header from '../../Components/Header/Header'
 import ShowGeneral from '../../Components/Show_General/ShowGeneral'
 import AddForm from '../../Components/AddForm/AddForm'
-import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { db } from '../../Config/Firebase'
 import Swal from 'sweetalert2'
 
@@ -64,12 +64,29 @@ function Terms_Condition() {
             }
         }
     }
+    const deletePolicy = async () => {
+        console.log("deltre")
+        await deleteDoc(doc(db, "Terms_Condition", DocId)).then((res) => {
+            setData(null)
+            Swal.fire("Success", "Deleted Successfully...", "success")
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err.message)
+            Swal.fire(err.message, "success")
+
+        })
+    }
+
     return (
         <>{
             !edit && (
                 <Box>
                     <Header btnTitle={DocId === null ? "Add Terms" : "Update Terms"} heading={"Terms and Condtions"} setedit={setEdit} />
-                    <ShowGeneral heading={Data.title} description={Data.desc} />
+                    <ShowGeneral
+                        heading={Data?.title}
+                        description={Data?.desc}
+                        deleteFunc={deletePolicy}
+                    />
                 </Box>
             )
         }

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Header from '../../Components/Header/Header'
 import ShowGeneral from '../../Components/Show_General/ShowGeneral'
 import AddForm from '../../Components/AddForm/AddForm'
-import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { db } from '../../Config/Firebase'
 import Swal from 'sweetalert2'
 
@@ -31,7 +31,7 @@ function ChairManMessage() {
     const [handleImg, setHandleImg] = useState([])
     const [ImgUrl, setImgUrl] = useState("")
 
-    const publishAbout = async (title, desc) => {
+    const publishAbout = async (title, desc, ImgUrl) => {
         console.log(title, desc)
         console.log("publishPost")
         if (!title || !desc) {
@@ -41,7 +41,7 @@ function ChairManMessage() {
                 await setDoc(doc(db, "Chairman_Message", DocId), {
                     title: title,
                     desc: desc,
-                    // PostImg: ImgUrl,
+                    Img: ImgUrl,
                     // status: "active",
                 }).then(() => {
                     Swal.fire("Success", "Message Updated...", "success")
@@ -53,7 +53,7 @@ function ChairManMessage() {
                 await addDoc(collection(db, "Chairman_Message"), {
                     title: title,
                     desc: desc,
-                    // PostImg: ImgUrl,
+                    Img: ImgUrl,
                     // status: "active",
                 }).then(() => {
                     Swal.fire("Success", "Message Added...", "success")
@@ -65,12 +65,32 @@ function ChairManMessage() {
             }
         }
     }
+
+    const deletePolicy = async () => {
+        console.log("deltre")
+        await deleteDoc(doc(db, "Chairman_Message", DocId)).then((res) => {
+            setData(null)
+            Swal.fire("Success", "Deleted Successfully...", "success")
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err.message)
+            Swal.fire(err.message, "success")
+
+        })
+    }
+
     return (
         <>{
             !edit && (
                 <Box>
                     <Header btnTitle={DocId === null ? "Add Message" : "Update Message"} heading={"Saylani's Chairman Message"} setedit={setEdit} />
-                    <ShowGeneral heading={Data.title} description={Data.desc} />
+                    <ShowGeneral
+                        heading={Data?.title}
+                        description={Data?.desc}
+                        chairManImg={Data?.Img}
+                        showImg={true}
+                        deleteFunc={deletePolicy}
+                    />
                 </Box>
             )
         }

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Header from '../../Components/Header/Header'
 import ShowGeneral from '../../Components/Show_General/ShowGeneral'
 import AddForm from '../../Components/AddForm/AddForm'
-import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 import { db } from '../../Config/Firebase'
 import Swal from 'sweetalert2'
 
@@ -64,12 +64,30 @@ function About_Saylani() {
             }
         }
     }
+
+    const deletePolicy = async () => {
+        console.log("deltre")
+        await deleteDoc(doc(db, "About", DocId)).then((res) => {
+            setData(null)
+            Swal.fire("Success", "Deleted Successfully...", "success")
+            window.location.reload();
+        }).catch((err) => {
+            console.log(err.message)
+            Swal.fire(err.message, "success")
+
+        })
+    }
+
     return (
         <>{
             !edit && (
                 <Box>
                     <Header btnTitle={DocId === null ? "Add About" : "Update About"} heading={"About Saylani"} setedit={setEdit} />
-                    <ShowGeneral heading={Data.title} description={Data.desc} />
+                    <ShowGeneral
+                        heading={Data?.title}
+                        description={Data?.desc}
+                        deleteFunc={deletePolicy}
+                    />
                 </Box>
             )
         }
